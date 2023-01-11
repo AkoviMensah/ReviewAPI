@@ -24,18 +24,20 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Review> GetReview(int id)
+        public async Task<ActionResult<Review>> GetReview(int id)
         {
-            return await _context.Reviews.FindAsync(id);
+            var review = await _context.Reviews.FindAsync(id);
+            if (review == null) return NotFound("Review not found");
+            return review;
         }
 
         [HttpPost("new")]
-        public async Task<Review> AddReview(Review review)
+        public async Task<ActionResult<Review>> AddReview(Review review)
         {
-            
-                await _context.Reviews.AddAsync(review);
-                await _context.SaveChangesAsync();
-                return review;
+            if (await  _context.Reviews.FindAsync(review.Id) != null) return BadRequest("review already exist in the DB");
+            await _context.Reviews.AddAsync(review);
+            await _context.SaveChangesAsync();
+            return review;
             
 
         }
@@ -54,30 +56,19 @@ namespace API.Controllers
 
                 return review;
             }
-            return BadRequest("not updated");
+            return NotFound("Review to update not found in DB");
 
         }
 
-        [HttpDelete("delete{id}")]
-        public async Task<bool> DeleteReview(int id)
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult<Review>> DeleteReview(int id)
         {
-            try
-            {
-                var newReview = await _context.Reviews.FindAsync(id);
-                if (newReview != null)
-                {
-                    _context.Reviews.Remove(newReview);
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
-                return false;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-                return false;
+            var dBReview = await _context.Reviews.FindAsync(id);
+            if (dBReview == null)  return NotFound("Review to delete not found in DB");
+            _context.Reviews.Remove(dBReview);
+            await _context.SaveChangesAsync();
 
-            }
+            return dBReview;
         }
     }
 }
