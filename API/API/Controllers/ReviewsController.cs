@@ -1,4 +1,5 @@
 ﻿using API.Data;
+using API.Dtos;
 using API.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,12 +33,14 @@ namespace API.Controllers
         }
 
         [HttpPost("new")]
-        public async Task<ActionResult<Review>> AddReview(Review review)
+        public async Task<ActionResult<Review>> AddReview(ReviewDto review)
         {
-            if (await  _context.Reviews.FindAsync(review.Id) != null) return BadRequest("review already exist in the DB");
-            await _context.Reviews.AddAsync(review);
+            var data = new Review();
+            data.Rating = review.Rating;
+            data.Text = review.Text;
+            await _context.Reviews.AddAsync(data);
             await _context.SaveChangesAsync();
-            return review;
+            return data;
             
 
         }

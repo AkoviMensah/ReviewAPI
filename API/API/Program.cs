@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<ReviewContext>(options => options.UseInMemoryDatabase("ReviewDB"));
+//builder.Services.AddDbContext<ReviewContext>(options => options.UseInMemoryDatabase("ReviewDB"));
+builder.Services.AddDbContext<ReviewContext>(options => 
+        options.UseSqlServer(builder.Configuration.GetConnectionString("mssql")));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
