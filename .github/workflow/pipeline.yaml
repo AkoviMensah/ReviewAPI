@@ -4,3 +4,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: dotnet build
+
+name: ci-pipeline
+
+on: push
