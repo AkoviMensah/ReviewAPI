@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'reviews-api'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_592440B1185043D39D4935E3F71DCAC8 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_329D9B22907A40FB9909038B01E47BEF }}
           package: .
